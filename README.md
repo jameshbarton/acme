@@ -110,6 +110,13 @@ The above example uses HTTP listeners. There is also sample `VirtualGateway` con
 
 Third, we'll configure `RouteTables` that are owned entirely by the application teams. They establish routes created by the three application teams. We will establish a 10s timeout policy for each set of routes by creating `RetryTimeoutPolicy` objects for each team and attach those to our routes via the label `policy: timeout-10s`.
 
+```sh
+# Establish route tables
+kubectl apply -f ./gloo/acme-route-tables-gloo.yaml
+# Attach 10s timeout policies dynamically
+kubectl apply -f ./gloo/acme-timeout-10s.yaml
+```
+
 Here is the `RouteTable` that manages the 70-30 split across primary and canary services for the acme2 team.
 
 ```yaml
@@ -150,11 +157,51 @@ spec:
             weight: 30
 ```
 
+Note that the provision of the `RouteTable` causes Gloo to automatically generate the lower-level Istio `DestinationRules` required to implement the canary routing. Here is one example:
+
 ```sh
-# Establish route tables
-kubectl apply -f ./gloo/acme-route-tables-gloo.yaml
-# Attach 10s timeout policies dynamically
-kubectl apply -f ./gloo/acme-timeout-10s.yaml
+kubectl get destinationrules -n acme2-istio-test -o yaml
+```
+
+```yaml
+apiVersion: v1
+items:
+- apiVersion: networking.istio.io/v1beta1
+  kind: DestinationRule
+  metadata:
+    annotations:
+      cluster.solo.io/cluster: gloo
+    creationTimestamp: "2023-07-20T13:22:23Z"
+    generation: 1
+    labels:
+      context.mesh.gloo.solo.io/cluster: gloo
+      context.mesh.gloo.solo.io/namespace: acme2-istio-test
+      context.mesh.gloo.solo.io/workspace: acme2-team
+      gloo.solo.io/parent_cluster: gloo
+      gloo.solo.io/parent_group: ""
+      gloo.solo.io/parent_kind: Service
+      gloo.solo.io/parent_name: acme2management
+      gloo.solo.io/parent_namespace: acme2-istio-test
+      gloo.solo.io/parent_version: v1
+      reconciler.mesh.gloo.solo.io/name: translator
+    name: acme2management-acme2-istio-tes-19008c821234b7975b1971055b631d1
+    namespace: acme2-istio-test
+    resourceVersion: "39253"
+    uid: 6094adb3-d709-44b1-a7d9-adeea96e0bb3
+  spec:
+    exportTo:
+    - .
+    host: acme2management.acme2-istio-test.svc.cluster.local
+    subsets:
+    - labels:
+        version: primary
+      name: version-primary
+    - labels:
+        version: canary
+      name: version-canary
+kind: List
+metadata:
+  resourceVersion: ""
 ```
 
 ## Test the Gloo Services
@@ -286,6 +333,20 @@ date: Thu, 20 Jul 2023 20:37:36 GMT
 server: istio-envoy
 content-length: 0
 ```
+
+## Observability with Gloo Dashboard
+
+In addition to supporting unambiguous multi-tenant routing, Gloo Platform also allows you to observe what's happening among the tenants of your service mesh. A convenient way to visualize traffic flows and debug using Gloo Platform is to use the flow graph bundled with the Gloo Platform UI. (These metrics can also be forwarded to your favorite SIEM tool for storage and analysis.)
+
+An easy way to enable this at development time is to port-forward the interface of the `gloo-mesh-ui` service, like this:
+
+```sh
+kubectl port-forward -n gloo-mesh svc/gloo-mesh-ui 8090:8090 --context gloo
+```
+
+Now point your browser at http://localhost:8090 and switch to Graph on the left navigation menu. Next to the `Filter By:` label, be sure to select all Workspaces, all Clusters, and all Namespaces. After a few seconds to allow for telemetry collection and processing, you’ll see a graph like the one below. It shows you the traffic moving between the ingress gateway and the four services we established, across all three workspaces. (You may also want to fire off a few additional curl commands like the one above to the gateway endpoint in order to make the statistics slightly more interesting.)
+
+![Multitenant Observability Top-Level](images/acme-dashboard-graph.png)
 
 ## Exercise Cleanup
 
