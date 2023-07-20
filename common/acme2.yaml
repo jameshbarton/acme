@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: acme2-istio-test
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: acme2management
+  namespace: acme2-istio-test
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: acme2management
+  namespace: acme2-istio-test
+spec:
+  selector:
+    app: acme2management
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 8081
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acme2management-primary
+  namespace: acme2-istio-test
+  labels:
+    app: acme2management
+    version: primary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acme2management
+      version: primary
+  template:
+    metadata:
+      labels:
+        app: acme2management
+        version: primary
+    spec:
+      serviceAccountName: acme2management   
+      containers:
+      - name: acme2management
+        image: nicholasjackson/fake-service:v0.7.8
+        ports:
+        - containerPort: 8081
+        env:
+        - name: "LISTEN_ADDR"
+          value: "0.0.0.0:8081"
+        - name: "NAME"
+          value: "acme2management"
+        - name: "MESSAGE"
+          value: "Hello From acme2management Primary"
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acme2management-canary
+  namespace: acme2-istio-test
+  labels:
+    app: acme2management
+    version: canary
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acme2management
+      version: canary
+  template:
+    metadata:
+      labels:
+        app: acme2management
+        version: canary
+    spec:
+      serviceAccountName: acme2management    
+      containers:
+      - name: acme2management
+        image: nicholasjackson/fake-service:v0.7.8
+        ports:
+        - containerPort: 8081
+        env:
+        - name: "LISTEN_ADDR"
+          value: "0.0.0.0:8081"
+        - name: "NAME"
+          value: "acme2management"
+        - name: "MESSAGE"
+          value: "Hello From acme2management Canary"

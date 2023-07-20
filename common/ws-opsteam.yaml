@@ -1,0 +1,23 @@
+apiVersion: admin.gloo.solo.io/v2
+kind: Workspace
+metadata:
+  name: ops-team
+  namespace: gloo-mesh
+spec:
+  workloadClusters:
+  - name: '*'
+    namespaces:
+    - name: ops-team
+    - name: gloo-mesh-gateways
+    - name: gloo-mesh-addons
+---
+apiVersion: admin.gloo.solo.io/v2
+kind: WorkspaceSettings
+metadata:
+  name: ops-team
+  namespace: ops-team
+spec:
+  importFrom:
+    - workspaces:
+      - selector:
+          team-category: app-team

@@ -1,0 +1,90 @@
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: acme1management
+  namespace: acme1-istio-test
+spec:
+  hosts:
+    - acme1management.btcloudentitypoc.net
+  virtualGateways:
+    - name: acme-gateway
+      namespace: ops-team
+  workloadSelectors: []
+  http:
+    - name: acme1management-routes
+      labels:
+        policy: timeout-10s
+      matchers:
+      - uri:
+          prefix: /v1/acme1s
+      - uri:
+          prefix: /v1/acme1and2s
+      forwardTo:
+        destinations:
+          - ref:
+              name: acme1management
+              namespace: acme1-istio-test
+---
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: acme2management
+  namespace: acme2-istio-test
+spec:
+  hosts:
+    - acme2management.btcloudentitypoc.net
+  virtualGateways:
+    - name: acme-gateway
+      namespace: ops-team
+  workloadSelectors: []
+  http:
+    - name: acme2management-routes
+      labels:
+        policy: timeout-10s
+      matchers:
+      - uri:
+          prefix: /v1/acme2s
+      - uri:
+          prefix: /v1/somemessage
+      forwardTo:
+        destinations:
+          - ref:
+              name: acme2management
+              namespace: acme2-istio-test
+            subset:
+              version: primary
+            weight: 70
+          - ref:
+              name: acme2management
+              namespace: acme2-istio-test
+            subset:
+              version: canary
+            weight: 30
+---
+apiVersion: networking.gloo.solo.io/v2
+kind: RouteTable
+metadata:
+  name: acme3management
+  namespace: acme3-istio-test
+spec:
+  hosts:
+    - acme3management.btcloudentitypoc.net
+  virtualGateways:
+    - name: acme-gateway
+      namespace: ops-team
+  workloadSelectors: []
+  http:
+    - name: acme3management-routes
+      labels:
+        policy: timeout-10s
+      matchers:
+      - uri:
+          prefix: /v1/acme3s
+      - uri:
+          prefix: /v1/somemessage
+      forwardTo:
+        destinations:
+          - ref:
+              name: acme3management
+              namespace: acme3-istio-test
+              cluster: gloo

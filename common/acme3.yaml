@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: acme3-istio-test
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: acme3management
+  namespace: acme3-istio-test
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: acme3management
+  namespace: acme3-istio-test
+spec:
+  selector:
+    app: acme3management
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: 8081
+---  
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: acme3management
+  namespace: acme3-istio-test
+  labels:
+    app: acme3management
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: acme3management
+      version: primary
+  template:
+    metadata:
+      labels:
+        app: acme3management
+        version: primary
+    spec:
+      serviceAccountName: acme3management   
+      containers:
+      - name: acme3management
+        image: nicholasjackson/fake-service:v0.7.8
+        ports:
+        - containerPort: 8081
+        env:
+        - name: "LISTEN_ADDR"
+          value: "0.0.0.0:8081"
+        - name: "NAME"
+          value: "acme3management"
+        - name: "MESSAGE"
+          value: "Hello From acme3management"

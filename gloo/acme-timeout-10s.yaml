@@ -1,0 +1,39 @@
+apiVersion: resilience.policy.gloo.solo.io/v2
+# NOTE: We could have also created a single policy object and exported it from its workspace
+kind: RetryTimeoutPolicy
+metadata:
+  name: timeout-10s
+  namespace: acme1-istio-test
+spec:
+  applyToRoutes:
+    - route:
+        labels:
+          policy: timeout-10s  # matches on route table route's labels
+  config:
+    requestTimeout: 10s
+---
+apiVersion: resilience.policy.gloo.solo.io/v2
+kind: RetryTimeoutPolicy
+metadata:
+  name: timeout-10s
+  namespace: acme1-istio-test
+spec:
+  applyToRoutes:
+    - route:
+        labels:
+          policy: timeout-10s  # matches on route table route's labels
+  config:
+    requestTimeout: 10s
+---
+apiVersion: resilience.policy.gloo.solo.io/v2
+kind: RetryTimeoutPolicy
+metadata:
+  name: timeout-10s
+  namespace: acme1-istio-test
+spec:
+  applyToRoutes:
+    - route:
+        labels:
+          policy: timeout-10s  # matches on route table route's labels
+  config:
+    requestTimeout: 10s

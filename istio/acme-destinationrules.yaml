@@ -1,0 +1,68 @@
+apiVersion: v1
+items:
+- apiVersion: networking.istio.io/v1beta1
+  kind: DestinationRule
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: acme1management
+      meta.helm.sh/release-namespace: acme1-istio-test
+    creationTimestamp: "2023-07-14T19:23:56Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: acme1management
+    namespace: acme1-istio-test
+    resourceVersion: "65942"
+    uid: 76851e05-1ce9-46f0-bb08-dec38bc91827
+  spec:
+    host: acme1management
+    subsets:
+    - labels:
+        version: 0.0.1
+      name: primary
+- apiVersion: networking.istio.io/v1beta1
+  kind: DestinationRule
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: acme2management
+      meta.helm.sh/release-namespace: acme2-istio-test
+    creationTimestamp: "2023-07-14T19:23:57Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: acme2management
+    namespace: acme2-istio-test
+    resourceVersion: "65968"
+    uid: 9f929fd9-dfdd-4c93-913f-838f1b5c857c
+  spec:
+    host: acme2management
+    subsets:
+    - labels:
+        version: 0.0.1
+      name: primary
+    - labels:
+        version: 0.0.2
+      name: canary
+- apiVersion: networking.istio.io/v1beta1
+  kind: DestinationRule
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: acme3management
+      meta.helm.sh/release-namespace: acme3-istio-test
+    creationTimestamp: "2023-07-14T19:23:58Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: acme3management
+    namespace: acme3-istio-test
+    resourceVersion: "66009"
+    uid: 7f935be2-2cdd-490e-87c2-d2639ea7dafa
+  spec:
+    host: acme3management
+    subsets:
+    - labels:
+        version: 0.0.1
+      name: primary
+kind: List
+metadata:
+  resourceVersion: ""

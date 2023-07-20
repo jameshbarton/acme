@@ -1,0 +1,68 @@
+apiVersion: admin.gloo.solo.io/v2
+kind: Workspace
+metadata:
+  name: acme1-team
+  namespace: gloo-mesh
+  labels:
+    team-category: app-team
+spec:
+  workloadClusters:
+  - name: '*'
+    namespaces:
+    - name: acme1-istio-test
+---
+apiVersion: admin.gloo.solo.io/v2
+kind: WorkspaceSettings
+metadata:
+  name: acme1-team
+  namespace: acme1-istio-test
+spec:
+  exportTo:
+    - workspaces:
+      - name: ops-team
+---
+apiVersion: admin.gloo.solo.io/v2
+kind: Workspace
+metadata:
+  name: acme2-team
+  namespace: gloo-mesh
+  labels:
+    team-category: app-team
+spec:
+  workloadClusters:
+  - name: '*'
+    namespaces:
+    - name: acme2-istio-test
+---
+apiVersion: admin.gloo.solo.io/v2
+kind: WorkspaceSettings
+metadata:
+  name: acme2-team
+  namespace: acme2-istio-test
+spec:
+  exportTo:
+    - workspaces:
+      - name: ops-team
+---
+apiVersion: admin.gloo.solo.io/v2
+kind: Workspace
+metadata:
+  name: acme3-team
+  namespace: gloo-mesh
+  labels:
+    team-category: app-team
+spec:
+  workloadClusters:
+  - name: '*'
+    namespaces:
+    - name: acme3-istio-test
+---
+apiVersion: admin.gloo.solo.io/v2
+kind: WorkspaceSettings
+metadata:
+  name: acme3-team
+  namespace: acme3-istio-test
+spec:
+  exportTo:
+    - workspaces:
+      - name: ops-team

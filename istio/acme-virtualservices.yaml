@@ -1,0 +1,141 @@
+apiVersion: v1
+items:
+- apiVersion: networking.istio.io/v1beta1
+  kind: VirtualService
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: acme1management
+      meta.helm.sh/release-namespace: acme1-istio-test
+    creationTimestamp: "2023-07-14T19:23:57Z"
+    generation: 1
+    labels:
+      app: acme1management
+      app.kubernetes.io/managed-by: Helm
+    name: acme1management
+    namespace: acme1-istio-test
+    resourceVersion: "65948"
+    uid: e2170675-a58f-4890-a733-cfec01760512
+  spec:
+    gateways:
+    - acme1management-gateway
+    hosts:
+    - acme1management.btcloudentitypoc.net
+    http:
+    - match:
+      - uri:
+          prefix: /v1/acme1s
+      - uri:
+          prefix: /v1/acme1and2s
+      name: acme1management-routes
+      route:
+      - destination:
+          host: acme1management
+          subset: primary
+      timeout: 10.0s
+- apiVersion: networking.istio.io/v1beta1
+  kind: VirtualService
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: acme2management
+      meta.helm.sh/release-namespace: acme2-istio-test
+    creationTimestamp: "2023-07-14T19:23:57Z"
+    generation: 1
+    labels:
+      app: acme2management
+      app.kubernetes.io/managed-by: Helm
+    name: acme2management-gw
+    namespace: acme2-istio-test
+    resourceVersion: "65978"
+    uid: b330207c-6f4a-4124-9424-a6f6bc81c4dd
+  spec:
+    gateways:
+    - acme2management-gateway
+    hosts:
+    - acme2management.btcloudentitypoc.net
+    http:
+    - match:
+      - uri:
+          prefix: /v1/acme2s
+      - uri:
+          prefix: /v1/somemessage
+      name: acme2management-routes
+      route:
+      - destination:
+          host: acme2management
+          subset: primary
+        weight: 70
+      - destination:
+          host: acme2management
+          subset: canary
+        weight: 30
+      timeout: 10.0s
+- apiVersion: networking.istio.io/v1beta1
+  kind: VirtualService
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: acme2management
+      meta.helm.sh/release-namespace: acme2-istio-test
+    creationTimestamp: "2023-07-14T19:23:57Z"
+    generation: 1
+    labels:
+      app: acme2management
+      app.kubernetes.io/managed-by: Helm
+    name: acme2management-ss
+    namespace: acme2-istio-test
+    resourceVersion: "65977"
+    uid: 8c3e26ca-665d-409e-b6be-d78b6db9f537
+  spec:
+    hosts:
+    - acme2management
+    http:
+    - match:
+      - uri:
+          prefix: /v1/acme2s
+      - uri:
+          prefix: /v1/somemessage
+      name: acme2management-routes
+      route:
+      - destination:
+          host: acme2management
+          subset: primary
+        weight: 70
+      - destination:
+          host: acme2management
+          subset: canary
+        weight: 30
+      timeout: 10.0s
+- apiVersion: networking.istio.io/v1beta1
+  kind: VirtualService
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: acme3management
+      meta.helm.sh/release-namespace: acme3-istio-test
+    creationTimestamp: "2023-07-14T19:23:58Z"
+    generation: 1
+    labels:
+      app: acme3management
+      app.kubernetes.io/managed-by: Helm
+    name: acme3management
+    namespace: acme3-istio-test
+    resourceVersion: "66015"
+    uid: c5cee37d-fea8-404b-861d-5c37e316b056
+  spec:
+    gateways:
+    - acme3management-gateway
+    hosts:
+    - acme3management.btcloudentitypoc.net
+    http:
+    - match:
+      - uri:
+          prefix: /v1/acme3s
+      - uri:
+          prefix: /v1/somemessage
+      name: acme3management-routes
+      route:
+      - destination:
+          host: acme3management
+          subset: primary
+      timeout: 10.0s
+kind: List
+metadata:
+  resourceVersion: ""

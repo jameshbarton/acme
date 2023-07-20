@@ -1,0 +1,26 @@
+apiVersion: networking.gloo.solo.io/v2
+kind: VirtualGateway
+metadata:
+  name: acme-gateway
+  namespace: ops-team
+spec:
+  listeners:
+  - port:
+      name: http2
+    http: {}
+    allowedRouteTables:
+    - host: acme1management.btcloudentitypoc.net
+  - port:
+      name: http2
+    http: {}
+    allowedRouteTables:
+    - host: acme2management.btcloudentitypoc.net
+  - port:
+      name: http2
+    http: {}
+    allowedRouteTables:
+    - host: acme3management.btcloudentitypoc.net
+  workloads:
+  - selector:
+      labels:
+        istio: ingressgateway
