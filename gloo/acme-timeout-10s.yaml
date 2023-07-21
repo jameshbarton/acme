@@ -16,7 +16,7 @@ apiVersion: resilience.policy.gloo.solo.io/v2
 kind: RetryTimeoutPolicy
 metadata:
   name: timeout-10s
-  namespace: acme1-istio-test
+  namespace: acme2-istio-test
 spec:
   applyToRoutes:
     - route:
@@ -29,7 +29,7 @@ apiVersion: resilience.policy.gloo.solo.io/v2
 kind: RetryTimeoutPolicy
 metadata:
   name: timeout-10s
-  namespace: acme1-istio-test
+  namespace: acme3-istio-test
 spec:
   applyToRoutes:
     - route:

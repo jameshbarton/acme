@@ -106,7 +106,7 @@ Second, we'll lay down a `VirtualGateway` that selects the Istio Ingress Gateway
 kubectl apply -f ./gloo/acme-http-gateways.yaml
 ```
 
-The above example uses HTTP listeners. There is also sample `VirtualGateway` config (./gloo/acme-gateways.yaml) provided for HTTPS listeners when an appropriate `*.btcloudentitypoc.net` wildcard cert is available.
+The above example uses HTTP listeners. There is also sample `VirtualGateway` [config](./gloo/acme-gateways-gloo.yaml) provided for HTTPS listeners when an appropriate `*.btcloudentitypoc.net` wildcard cert is available. More documentation on how to configure HTTPS is available [here](https://docs.solo.io/gloo-gateway/latest/listeners/https/).
 
 Third, we'll configure `RouteTables` that are owned entirely by the application teams. They establish routes created by the three application teams. We will establish a 10s timeout policy for each set of routes by creating `RetryTimeoutPolicy` objects for each team and attach those to our routes via the label `policy: timeout-10s`.
 

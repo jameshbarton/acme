@@ -1,9 +1,4 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: acme2-istio-test
----
-apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: acme2management
