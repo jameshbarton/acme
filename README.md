@@ -338,7 +338,7 @@ content-length: 0
 
 In addition to supporting unambiguous multi-tenant routing, Gloo Platform also allows you to observe what's happening among the tenants of your service mesh. A convenient way to visualize traffic flows and debug using Gloo Platform is to use the flow graph bundled with the Gloo Platform UI. (These metrics can also be forwarded to your favorite SIEM tool for storage and analysis.)
 
-An easy way to enable this at development time is to port-forward the interface of the `gloo-mesh-ui` service, like this:
+An easy way to enable this at development time is to activate the Gloo Platform dashboard, like this:
 
 ```sh
 meshctl dashboard
