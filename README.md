@@ -341,10 +341,10 @@ In addition to supporting unambiguous multi-tenant routing, Gloo Platform also a
 An easy way to enable this at development time is to port-forward the interface of the `gloo-mesh-ui` service, like this:
 
 ```sh
-kubectl port-forward -n gloo-mesh svc/gloo-mesh-ui 8090:8090 --context gloo
+meshctl dashboard
 ```
 
-Now point your browser at http://localhost:8090 and switch to Graph on the left navigation menu. Next to the `Filter By:` label, be sure to select all Workspaces, all Clusters, and all Namespaces. After a few seconds to allow for telemetry collection and processing, you’ll see a graph like the one below. It shows you the traffic moving between the ingress gateway and the four services we established, across all three workspaces. (You may also want to fire off a few additional curl commands like the one above to the gateway endpoint in order to make the statistics slightly more interesting.)
+This should open a browser tab pointed at http://localhost:8090. Switch to Graph on the left navigation menu. Next to the `Filter By:` label, be sure to select all Workspaces, all Clusters, and all Namespaces. After a few seconds to allow for telemetry collection and processing, you’ll see a graph like the one below. It shows you the traffic moving between the ingress gateway and the four services we established, across all three workspaces. (You may also want to fire off a few additional curl commands like the one above to the gateway endpoint in order to make the statistics slightly more interesting.)
 
 ![Multitenant Observability Top-Level](images/acme-dashboard-graph.png)
 
